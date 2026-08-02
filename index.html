@@ -857,16 +857,16 @@ a { color: inherit; text-decoration: none; }
  *  中国官方媒体报道精选（手动更新 2026-08-01）
  *  ================================================================ */
 var CURATED_CHINA = [
-  // 人民日报 2026-08-02
-  { title: '以"第一"之名赴强军之约——庆祝建军99周年（强军路上）', source: '人民日报', link: 'https://www.peopleapp.com/column/30052823154-500007629882', date: '2026-08-02', type: 'official' },
-  { title: '不断创造高质量发展新业绩（今日谈）', source: '人民日报', link: 'https://www.ts.cn/xwzx/gnxw/202608/t20260802_35746436.shtml', date: '2026-08-02', type: 'official' },
-  { title: '谋幸福——深刻认识"最本质的特征"和"最大优势"', source: '人民日报', link: 'http://news.cyol.com/gb/news/articles/2026-08/02/content_5xE9e0F0dm.html', date: '2026-08-02', type: 'official' },
-  { title: '中方在联合国举行2026世界人工智能大会吹风会', source: '人民日报', link: 'https://cpc.people.com.cn/n1/2026/0802/c64387-40772297.html', date: '2026-08-02', type: 'official' },
-  // 新华社 2026-08-02
+  // 人民日报
+  { title: '以"第一"之名赴强军之约——庆祝建军99周年（头版专稿）', source: '人民日报', link: 'https://www.peopleapp.com/column/30052823154-500007629882', date: '2026-08-02', type: 'official' },
+  { title: '谋幸福——深刻认识"最本质的特征"和"最大优势"（金社平）', source: '人民日报', link: 'http://news.cyol.com/gb/news/articles/2026-08/02/content_5xE9e0F0dm.html', date: '2026-08-02', type: 'official' },
+  { title: '不断创造高质量发展新业绩（今日谈·头版评论）', source: '人民日报', link: 'https://www.ts.cn/xwzx/gnxw/202608/t20260802_35746436.shtml', date: '2026-08-02', type: 'official' },
+  { title: '义乌：排队减少出海加速 跨境电商物流提速10%', source: '人民日报/央视', link: 'https://news.qq.com/rain/a/20260802A054B600', date: '2026-08-02', type: 'official' },
+  // 新华社
   { title: '多个重大工程稳步推进：平陆运河通水、三峡新通道开工', source: '新华社', link: 'https://news.cri.cn/20260802/e02adefd-1ab4-49b2-986a-45a44042a8d5.html', date: '2026-08-02', type: 'official' },
-  { title: 'H1 GDP 69.6 trillion yuan +4.7%; industrial profits +18.7%', source: '新华社', link: 'http://chinaview.cn/20260801/7b4519c356b84b7aaaf5e85c7546ab19/c.html', date: '2026-08-02', type: 'official' },
-  { title: '我国智能算力同比增长177% Kimi K3开源模型发布', source: '新华社', link: 'https://english.news.cn/', date: '2026-08-02', type: 'official' },
-  { title: '景德镇手工瓷业遗存列入世界遗产 中国达61项', source: '新华社', link: 'http://www.china.org.cn/world/Off_the_Wire/2026-08/01/content_118628796.shtml', date: '2026-08-02', type: 'official' },
+  { title: 'EU holds videoconference over Ceuta migrant crisis', source: '新华社 Xinhua', link: 'http://english.news.cn/20260802/e759508987454ac1b88ecbc3718c58c2/c.html', date: '2026-08-02', type: 'official' },
+  { title: 'Trump says US to hold off attack on Iran amid conflicting claims', source: '新华社 Xinhua', link: 'http://www.china.org.cn/world/Off_the_Wire/2026-08/02/content_118629980.shtml', date: '2026-08-02', type: 'official' },
+  { title: '上半年GDP 69.6万亿元 +4.7% 规上工业利润+18.7%', source: '新华社', link: 'http://chinaview.cn/20260801/7b4519c356b84b7aaaf5e85c7546ab19/c.html', date: '2026-08-02', type: 'official' },
 ];
 
 const FEED_CONFIG = {
@@ -1181,18 +1181,18 @@ function getSourceTier(name) {
  *  实时热搜数据（由 Tavily 搜索更新）
  *  ================================================================ */
 var TRENDING_TOPICS = [
-  { keyword: "US Iran strikes energy infrastructure", cn: "美拟打击伊朗能源设施 中东告急", url: "https://abcnews.com/International/wireStory/trump-threatens-strikes-iran-developments-middle-east-135282568" },
-  { keyword: "Hamas Gaza disarmament historic deal", cn: "哈马斯同意解除武装 加沙和平协议", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-1-2026/4015465" },
-  { keyword: "Hormuz tanker hit oil shipping collapse", cn: "霍尔木兹油轮遇袭 航运崩溃", url: "https://www.wionews.com/world/oil-tanker-hit-by-unknown-projectile-off-oman-as-us-iran-tensions-escalate-1785556874223" },
-  { keyword: "Spain Ceuta 50000 migrants Schengen crisis", cn: "西班牙休达移民危机 申根暂停", url: "https://www.bssnews.net/international/410639" },
-  { keyword: "Kyiv Russian deadly missile strike", cn: "俄导弹袭基辅 平民死伤", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
-  { keyword: "FIFA scraps 20 billion World Cup deal", cn: "FIFA取消200亿美元世界杯交易", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
-  { keyword: "Japan Kumamoto earthquake 35 dead", cn: "日本熊本地震35人遇难", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
-  { keyword: "China Chongqing landslide 51 dead", cn: "重庆山体滑坡51人遇难", url: "https://english.news.cn/" },
-  { keyword: "AI safety Claude OpenAI breach tests", cn: "Claude与OpenAI测试中突破隔离", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-1-2026/4015465" },
-  { keyword: "Korea KOSPI record 18 percent surge", cn: "韩国KOSPI单日暴涨18%", url: "https://finance.jrj.com.cn/2026/08/01081257978735.shtml" },
+  { keyword: "Trump cancels Iran strike pending deal", cn: "特朗普叫停打击伊朗 等签和平协议", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-2-2026/4016071" },
+  { keyword: "Hormuz blockade US gas 4 dollars surge", cn: "霍尔木兹封锁 美国油价飙至$4.11", url: "https://www.vietnam.vn/en/tin-quoc-te-ngay-2-8-who-canh-bao-dich-ebola-tai-congo-phong-toa-eo-bien-hormuz-day-gia-hang-hoa-tai-my-tang-cao" },
+  { keyword: "Hamas disarm Gaza Israel strikes continue", cn: "哈马斯同意解除武装 以军继续空袭", url: "https://uat.apnews.com/article/trump-iran-strait-hormuz-israel-gaza-mideast-e61e88c14d8aca48c1c56368650baea5" },
+  { keyword: "DRC Ebola largest outbreak 3605 deaths", cn: "刚果埃博拉最大爆发 3605例1587死", url: "https://www.vietnam.vn/en/tin-quoc-te-ngay-2-8-who-canh-bao-dich-ebola-tai-congo-phong-toa-eo-bien-hormuz-day-gia-hang-hoa-tai-my-tang-cao" },
+  { keyword: "Ceuta Spain 69500 migrants returned EU", cn: "西班牙休达近7万移民遣返 EU紧急会议", url: "http://english.news.cn/20260802/e759508987454ac1b88ecbc3718c58c2/c.html" },
+  { keyword: "Moscow restaurant bombing 3 dead 21 hurt", cn: "莫斯科餐厅爆炸 3死21伤", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-2-2026/4016071" },
+  { keyword: "Nepal avalanche Nirmal Purja climber dead", cn: "尼泊尔雪崩 传奇登山家Purja遇难", url: "https://us.cnn.com/2026/08/02/world/video/avalanche-climber-nirmal-purja-dead-search-for-missing-vrtc-digvid" },
+  { keyword: "Kyiv massive Russian missile 9 dead", cn: "俄大规模导弹袭基辅 9人遇难", url: "http://www.china.org.cn/world/Off_the_Wire/2026-08/02/content_118629980.shtml" },
+  { keyword: "Peru Nazca plane crash 13 dead tourists", cn: "秘鲁纳斯卡飞机坠毁 13人遇难", url: "https://www.abc.net.au./listen/programs/abc-news-top-stories/fuel-excise-cut-to-end-peru-plane-crash-latest-news-just-in/106987302" },
+  { keyword: "WMO El Nino August October extreme weather", cn: "WMO:厄尔尼诺8-10月持续增强", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-2-2026/4016071" },
 ];
-var TRENDING_UPDATED = "2026-08-02 14:00";
+var TRENDING_UPDATED = "2026-08-02 17:00";
 
 /* ================================================================
  *  工具函数
