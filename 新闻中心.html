@@ -1,0 +1,2300 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球新闻聚合 — 国际新闻浏览工具</title>
+<style>
+/* ============================================================
+   CSS 变量 — 亮色主题（默认）
+   ============================================================ */
+:root {
+  --bg-primary: #fdfaf3;
+  --bg-secondary: #f5f0e8;
+  --bg-card: #faf7f0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555;
+  --text-headline: #111;
+  --accent: #c62828;
+  --accent-hover: #b71c1c;
+  --border: #d6cec0;
+  --border-light: #e8e0d5;
+  --card-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  --card-hover-shadow: 0 3px 12px rgba(0,0,0,0.10);
+  --badge-bg: #e8e0d5;
+  --badge-text: #555;
+  --tab-active-bg: #1a1a1a;
+  --tab-active-text: #fff;
+  --tab-hover-bg: #e8e0d5;
+  --skeleton: #e8e0d5;
+  --skeleton-shine: #f5f0e8;
+  --header-bg: #faf7f0;
+  --header-border: #d6cec0;
+  --error-bg: #fff3cd;
+  --error-text: #856404;
+  --error-border: #ffc107;
+  --warning-bg: #fff8e1;
+  --warning-text: #8d6e00;
+  --warning-border: #ffc107;
+}
+
+/* ============================================================
+   CSS 变量 — 暗色主题
+   ============================================================ */
+[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #222;
+  --bg-card: #252525;
+  --text-primary: #e0d8cc;
+  --text-secondary: #aaa;
+  --text-headline: #f0e8d8;
+  --accent: #ef5350;
+  --accent-hover: #f44336;
+  --border: #3a3a3a;
+  --border-light: #333;
+  --card-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  --card-hover-shadow: 0 3px 12px rgba(0,0,0,0.5);
+  --badge-bg: #333;
+  --badge-text: #bbb;
+  --tab-active-bg: #f0e8d8;
+  --tab-active-text: #1a1a1a;
+  --tab-hover-bg: #333;
+  --skeleton: #333;
+  --skeleton-shine: #2a2a2a;
+  --header-bg: #252525;
+  --header-border: #3a3a3a;
+  --error-bg: #3d2e00;
+  --error-text: #ffc107;
+  --error-border: #856404;
+  --warning-bg: #3d2e00;
+  --warning-text: #ffc107;
+  --warning-border: #856404;
+}
+
+/* ============================================================
+   基础重置
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   页面头部
+   ============================================================ */
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  padding: 1.25rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.header-brand h1 {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  letter-spacing: 0.02em;
+}
+
+.header-brand p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.header-controls button {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 36px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.header-controls button:hover {
+  background: var(--tab-hover-bg);
+  border-color: var(--text-secondary);
+}
+
+.header-controls button:active { transform: scale(0.96); }
+
+#bilingual-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+[data-theme="dark"] #bilingual-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+#last-updated {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   热搜面板
+   ============================================================ */
+.trending-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-primary);
+}
+
+.trending-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #d32f2f;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.trending-tag {
+  display: inline-block;
+  font-size: 0.76rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.25rem 0.65rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  border: 1px solid var(--border-light);
+  text-decoration: none;
+}
+
+.trending-tag:hover {
+  background: #d32f2f;
+  color: #fff;
+  border-color: #d32f2f;
+}
+
+.trending-updated {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .trending-panel { padding: 0.5rem 0.75rem; gap: 0.35rem; }
+  .trending-tag { font-size: 0.72rem; padding: 0.2rem 0.5rem; }
+  .trending-updated { display: none; }
+}
+
+/* ============================================================
+   标签导航栏
+   ============================================================ */
+.tab-bar-wrapper {
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 118px;
+  z-index: 99;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+/* 标签栏左右箭头 */
+.tab-arrow {
+  display: flex;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin: 0 2px;
+}
+.tab-arrow:hover {
+  background: var(--tab-hover-bg);
+  border-color: var(--text-secondary);
+}
+
+.tab-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 2px solid transparent;
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+.tab-btn:hover {
+  background: var(--tab-hover-bg);
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--tab-active-bg);
+  color: var(--tab-active-text);
+  font-weight: 600;
+}
+
+.tab-feed-dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.tab-feed-dots .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.ok { background: #4caf50; }
+.dot.fail { background: #f44336; }
+.dot.loading { background: #ccc; animation: pulse 1s infinite; }
+
+/* ============================================================
+   主内容区
+   ============================================================ */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* 内容区域过渡动画 */
+#content-area {
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+#content-area.switching {
+  opacity: 0.4;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   新闻卡片
+   ============================================================ */
+.news-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.news-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--card-accent, var(--accent));
+  border-radius: 0 3px 3px 0;
+}
+
+.news-card:hover {
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+.card-source {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--card-accent, var(--accent));
+  background: color-mix(in srgb, var(--card-accent, var(--accent)) 10%, transparent);
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.card-headline {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-headline);
+}
+
+.card-headline a {
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.card-headline a:hover { color: var(--accent); }
+
+.card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.card-arrow {
+  font-size: 1rem;
+  color: var(--accent);
+  transition: transform 0.2s ease;
+}
+
+.news-card:hover .card-arrow { transform: translateX(3px); }
+
+/* ============================================================
+   卡片缩略图（图文混排）
+   ============================================================ */
+.news-card.has-thumb {
+  flex-direction: row;
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+.card-thumb {
+  width: 130px;
+  min-height: 85px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--skeleton);
+  align-self: stretch;
+}
+
+.card-thumb-placeholder {
+  width: 130px;
+  min-height: 85px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--skeleton);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+/* 译文样式 */
+.card-translation {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  padding: 0.3rem 0 0.3rem 0.55rem;
+  border-left: 2px solid var(--border-light);
+  margin-top: 0.15rem;
+  font-style: italic;
+  display: none;
+}
+
+.show-translation .card-translation {
+  display: block;
+}
+
+.card-translation.loading {
+  color: #aaa;
+  border-left-color: #ddd;
+}
+
+/* 信号标签 */
+.signals-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.signal-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 3px;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
+
+.signal-tag.top-story {
+  background: #c62828;
+  color: #fff;
+}
+.signal-tag.authoritative {
+  background: #ff6f00;
+  color: #fff;
+  font-weight: 700;
+}
+.signal-tag.hot {
+  background: #d32f2f;
+  color: #fff;
+  animation: pulse-tag 2s infinite;
+}
+.signal-tag.warm {
+  background: #ef9a9a;
+  color: #5a0000;
+}
+.signal-tag.in-depth {
+  background: #1565c0;
+  color: #fff;
+}
+.signal-tag.breaking {
+  background: #f9a825;
+  color: #333;
+}
+[data-theme="dark"] .signal-tag.breaking { color: #1a1a1a; }
+[data-theme="dark"] .signal-tag.warm { background: #5a2020; color: #ef9a9a; }
+
+@keyframes pulse-tag {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ============================================================
+   骨架屏（加载中占位）
+   ============================================================ */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.skeleton-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow: hidden;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--skeleton);
+  animation: shimmer 1.8s infinite;
+}
+
+.skeleton-line.short { width: 35%; }
+.skeleton-line.medium { width: 65%; }
+.skeleton-line.long { width: 90%; }
+.skeleton-line.title { height: 20px; width: 100%; }
+.skeleton-line.title2 { height: 20px; width: 80%; }
+
+@keyframes shimmer {
+  0%   { background: var(--skeleton); }
+  50%  { background: var(--skeleton-shine); }
+  100% { background: var(--skeleton); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ============================================================
+   回退链接区
+   ============================================================ */
+.fallback-section {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.fallback-section h3 {
+  font-family: "Noto Serif SC", Georgia, serif;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-headline);
+}
+
+.fallback-section > p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.fallback-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.fallback-link:hover {
+  border-color: var(--accent);
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-1px);
+}
+
+.fallback-link .arrow { color: var(--accent); }
+
+.fallback-header {
+  grid-column: 1 / -1;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-headline);
+  padding: 0.6rem 0 0.2rem;
+  margin-top: 0.3rem;
+  border-bottom: 2px solid var(--border);
+}
+
+/* ============================================================
+   提示横幅
+   ============================================================ */
+.status-banner {
+  text-align: center;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.84rem;
+  display: none;
+}
+
+.status-banner.warning {
+  display: block;
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  border: 1px solid var(--warning-border);
+}
+
+.status-banner.error {
+  display: block;
+  background: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
+}
+
+.status-banner button {
+  background: none;
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   空状态
+   ============================================================ */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-state p { font-size: 0.9rem; }
+
+/* ============================================================
+   页脚
+   ============================================================ */
+.site-footer {
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.site-footer a { color: var(--accent); text-decoration: underline; }
+
+/* ============================================================
+   响应式布局
+   ============================================================ */
+@media (max-width: 640px) {
+  .site-header { padding: 0.9rem 1rem; }
+  .header-brand h1 { font-size: 1.2rem; }
+  .header-brand p { font-size: 0.7rem; }
+  .header-controls button { font-size: 0.75rem; padding: 0.3rem 0.6rem; min-height: 32px; }
+  #last-updated { font-size: 0.7rem; }
+
+  .tab-bar { padding: 0.4rem 0.75rem; gap: 0.15rem; }
+  .tab-btn { font-size: 0.78rem; padding: 0.4rem 0.7rem; min-height: 34px; }
+
+  .main-content { padding: 1rem; }
+  .content-grid { grid-template-columns: 1fr; }
+  .skeleton-grid { grid-template-columns: 1fr; }
+
+  .tab-bar-wrapper { top: 94px; }
+
+  .news-card.has-thumb { flex-direction: column; }
+  .card-thumb { width: 100%; height: 150px; min-height: auto; }
+  .card-thumb-placeholder { width: 100%; height: 80px; min-height: auto; }
+  .card-translation { font-size: 0.78rem; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .content-grid { grid-template-columns: repeat(2, 1fr); }
+  .skeleton-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1025px) {
+  .content-grid { grid-template-columns: repeat(3, 1fr); }
+  .skeleton-grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     页面头部
+     ============================================================ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <h1>📰 全球新闻聚合</h1>
+      <p>国际新闻浏览工具 · 聚合来自 BBC、CNN、Al Jazeera、DW、France 24、NHK 等权威媒体</p>
+    </div>
+    <div class="header-controls">
+      <span id="last-updated">等待加载…</span>
+      <button id="bilingual-btn" title="切换中英双语标题显示">🔤 双语</button>
+      <button id="refresh-btn" title="强制刷新所有新闻源">🔄 刷新</button>
+      <button id="theme-toggle" title="切换暗色/亮色模式">🌓 主题</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     热搜面板
+     ============================================================ -->
+<div class="trending-panel" id="trending-panel">
+  <span class="trending-label">🔥 实时热搜</span>
+  <!-- JS 动态渲染 -->
+  <span class="trending-updated" id="trending-updated"></span>
+</div>
+
+<!-- ============================================================
+     标签导航
+     ============================================================ -->
+<div class="tab-bar-wrapper">
+  <button class="tab-arrow" id="tab-arrow-left" title="向左滚动">◀</button>
+  <nav class="tab-bar" id="tab-bar">
+    <!-- JS 动态生成 -->
+  </nav>
+  <button class="tab-arrow" id="tab-arrow-right" title="向右滚动">▶</button>
+</div>
+
+<!-- ============================================================
+     主内容区
+     ============================================================ -->
+<main class="main-content" id="main-content">
+  <!-- 状态横幅 -->
+  <div class="status-banner" id="status-banner"></div>
+  <!-- 新闻卡片 / 骨架屏 / 回退链接 / 空状态 -->
+  <div id="content-area"></div>
+</main>
+
+<!-- ============================================================
+     页脚
+     ============================================================ -->
+<footer class="site-footer">
+  <p>
+    <strong>📡 关于 RSS：</strong>RSS 是新闻网站提供的一种"信息订阅"格式——就像报纸的电子目录，只包含标题、摘要和链接，不含全文。
+    全球大多数新闻机构都免费提供 RSS，方便读者订阅。
+  </p>
+  <p>
+    <strong>🔧 关于 RSS2JSON：</strong>浏览器无法直接读取 RSS 格式，所以本站通过
+    <a href="https://rss2json.com" target="_blank" rel="noopener noreferrer">RSS2JSON</a> 这个免费中转服务「翻译」成网页可读的格式。
+    你可以把它想象成一个"翻译官"——新闻网站 → RSS（机器语言）→ RSS2JSON（翻译）→ 你的浏览器。
+  </p>
+  <p>
+    <strong>⚠️ 关于中国版面：</strong>聚焦中国国内新闻（政治、社会、经济、文化），RSS 实时源包括 Sixth Tone（澎湃英文）、Caixin Global（财新英文）、BBC China、南华早报。
+    新华社、人民日报、央视网等国内官媒因 RSS 不稳定，放在「直链」区域，点击直接访问中文官网。
+  </p>
+  <p>🔗 本站仅展示新闻标题与摘要，点击标题跳转至原文阅读全文 · 所有内容版权归原作者及新闻机构所有</p>
+  <p>🛠️ 如需添加/修改新闻源，请用文本编辑器打开本文件，修改 <code>FEED_CONFIG</code> 配置区块</p>
+</footer>
+
+<!-- ============================================================
+     JavaScript
+     ============================================================ -->
+<script>
+(function() {
+'use strict';
+
+/* ================================================================
+ *  新闻源配置 (NEWS FEED CONFIGURATION)
+ *  ================================================================
+ *  这是你需要修改的部分！
+ *
+ *  如何添加新的 RSS 源:
+ *    1. 找到新闻网站的 RSS 地址
+ *    2. 在对应的区域或主题下面，按格式添加:
+ *       { name: "网站名称", url: "RSS地址" }
+ *    3. 保存文件，刷新浏览器
+ *
+ *  如何删除 RSS 源:
+ *    直接删除或注释掉对应行即可
+ *  ================================================================ */
+
+/* ================================================================
+ *  中国官方媒体报道精选（手动更新 2026-08-01）
+ *  ================================================================ */
+var CURATED_CHINA = [
+  // 人民日报 2026-08-02
+  { title: '以"第一"之名赴强军之约——庆祝建军99周年（强军路上）', source: '人民日报', link: 'https://www.peopleapp.com/column/30052823154-500007629882', date: '2026-08-02', type: 'official' },
+  { title: '不断创造高质量发展新业绩（今日谈）', source: '人民日报', link: 'https://www.ts.cn/xwzx/gnxw/202608/t20260802_35746436.shtml', date: '2026-08-02', type: 'official' },
+  { title: '谋幸福——深刻认识"最本质的特征"和"最大优势"', source: '人民日报', link: 'http://news.cyol.com/gb/news/articles/2026-08/02/content_5xE9e0F0dm.html', date: '2026-08-02', type: 'official' },
+  { title: '中方在联合国举行2026世界人工智能大会吹风会', source: '人民日报', link: 'https://cpc.people.com.cn/n1/2026/0802/c64387-40772297.html', date: '2026-08-02', type: 'official' },
+  // 新华社 2026-08-02
+  { title: '多个重大工程稳步推进：平陆运河通水、三峡新通道开工', source: '新华社', link: 'https://news.cri.cn/20260802/e02adefd-1ab4-49b2-986a-45a44042a8d5.html', date: '2026-08-02', type: 'official' },
+  { title: 'H1 GDP 69.6 trillion yuan +4.7%; industrial profits +18.7%', source: '新华社', link: 'http://chinaview.cn/20260801/7b4519c356b84b7aaaf5e85c7546ab19/c.html', date: '2026-08-02', type: 'official' },
+  { title: '我国智能算力同比增长177% Kimi K3开源模型发布', source: '新华社', link: 'https://english.news.cn/', date: '2026-08-02', type: 'official' },
+  { title: '景德镇手工瓷业遗存列入世界遗产 中国达61项', source: '新华社', link: 'http://www.china.org.cn/world/Off_the_Wire/2026-08/01/content_118628796.shtml', date: '2026-08-02', type: 'official' },
+];
+
+const FEED_CONFIG = {
+  // ---- 按区域分类 ----
+  regions: {
+    'china': {
+      label: '🇨🇳 中国',
+      feeds: [
+        // 中国国内新闻
+        { name: '南华早报 SCMP（中国版）', url: 'https://www.scmp.com/rss/4/feed' },
+        { name: 'Caixin Global 财新国际',  url: 'https://www.caixinglobal.com/feed/' },
+      ],
+      fallback: [
+        { name: '📰 RSS抓取 · 中国国内报道（英文）', url: '' },
+        { name: 'Sixth Tone 第六声（社会/文化深度报道）', url: 'https://www.sixthtone.com/' },
+        { name: 'Caixin Global 财新国际（财经/政治）', url: 'https://www.caixinglobal.com/' },
+        { name: 'BBC China 频道',            url: 'https://www.bbc.com/news/world/asia/china' },
+        { name: '南华早报 SCMP（香港英文媒体）', url: 'https://www.scmp.com/news/china' },
+        { name: '', url: '' },
+        { name: '🇨🇳 国内中文媒体 · 直链', url: '' },
+        { name: '新华网 · 国内新闻',        url: 'http://www.xinhuanet.com/politics/' },
+        { name: '人民网 · 时政频道',        url: 'http://politics.people.com.cn/' },
+        { name: '央视网 · 国内新闻',        url: 'https://news.cctv.com/china/' },
+        { name: '澎湃新闻',                  url: 'https://www.thepaper.cn/' },
+        { name: '环球网 · 国内',            url: 'https://china.huanqiu.com/' },
+        { name: '财新网（中文版）',         url: 'https://www.caixin.com/' },
+      ]
+    },
+    'asia-pacific': {
+      label: '🌏 亚太',
+      feeds: [
+        { name: 'NHK World 日本放送',    url: 'https://www3.nhk.or.jp/nhkworld/en/rss/news.xml' },
+        { name: 'BBC Asia',               url: 'https://feeds.bbci.co.uk/news/world/asia/rss.xml' },
+        { name: '韩联社 Yonhap',          url: 'https://en.yna.co.kr/RSS/news.xml' },
+        { name: 'ABC 澳洲广播公司',      url: 'https://www.abc.net.au/news/feed/51120/rss.xml' },
+        { name: 'Straits Times 海峡时报', url: 'https://www.straitstimes.com/news/asia/rss.xml' },
+        { name: 'Times of India 印度时报', url: 'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms' },
+        { name: '日经亚洲 Nikkei Asia',   url: 'https://asia.nikkei.com/rss/feed' },
+        { name: 'CNA 亚洲新闻台',         url: 'https://www.channelnewsasia.com/rss/latest' },
+      ],
+      fallback: [
+        { name: 'NHK World 官网',         url: 'https://www3.nhk.or.jp/nhkworld/en/news/' },
+        { name: 'BBC 亚洲频道',            url: 'https://www.bbc.com/news/world/asia' },
+        { name: '韩联社英文',              url: 'https://en.yna.co.kr/' },
+        { name: 'ABC 澳洲',                url: 'https://www.abc.net.au/news/' },
+        { name: '海峡时报',                url: 'https://www.straitstimes.com/asia' },
+        { name: '印度时报',                url: 'https://timesofindia.indiatimes.com/' },
+        { name: '日经亚洲 Nikkei',         url: 'https://asia.nikkei.com/' },
+        { name: '南华早报 SCMP',           url: 'https://www.scmp.com/news/asia' },
+      ]
+    },
+    'europe': {
+      label: '🇪🇺 欧洲',
+      feeds: [
+        { name: '路透社 Reuters',        url: 'https://www.reuters.com/tools/rss' },
+        { name: '法新社 AFP',            url: 'https://www.afp.com/en/rss' },
+        { name: 'BBC World',             url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+        { name: 'DW 德国之声',           url: 'https://rss.dw.com/rdf/rss-en-world' },
+        { name: 'France 24',             url: 'https://www.france24.com/en/rss' },
+        { name: '卫报 The Guardian',      url: 'https://www.theguardian.com/world/rss' },
+        { name: 'Euronews',              url: 'https://www.euronews.com/rss' },
+        { name: 'Politico Europe',        url: 'https://www.politico.eu/feed/' },
+        { name: '独立报 Independent',     url: 'https://www.independent.co.uk/news/world/rss' },
+      ],
+      fallback: [
+        { name: '路透社 Reuters',         url: 'https://www.reuters.com/world/' },
+        { name: '法新社 AFP',             url: 'https://www.afp.com/en/news' },
+        { name: 'BBC World',              url: 'https://www.bbc.com/news/world' },
+        { name: 'DW 德国之声',            url: 'https://www.dw.com/en/top-stories/s-9097' },
+        { name: 'France 24 英文版',       url: 'https://www.france24.com/en/' },
+        { name: '卫报 The Guardian',       url: 'https://www.theguardian.com/world' },
+        { name: 'Euronews',               url: 'https://www.euronews.com/' },
+        { name: '莫斯科时报（备选）',     url: 'https://www.themoscowtimes.com/' },
+      ]
+    },
+    'americas': {
+      label: '🌎 美洲',
+      feeds: [
+        { name: '美联社 AP News',        url: 'https://www.mysanantonio.com/rss/feed/ap-top-news-806.php' },
+        { name: '路透社 Reuters',        url: 'https://www.reuters.com/tools/rss' },
+        { name: 'CNN World',             url: 'http://rss.cnn.com/rss/cnn_world.rss' },
+        { name: 'BBC US & Canada',       url: 'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml' },
+        { name: '纽约时报 NYT',          url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml' },
+        { name: 'CBC 加拿大广播',        url: 'https://www.cbc.ca/webfeed/rss/rss-world' },
+        { name: 'NPR 美国公共广播',      url: 'https://feeds.npr.org/1001/rss.xml' },
+        { name: '华盛顿邮报 WaPo',       url: 'https://feeds.washingtonpost.com/rss/world' },
+      ],
+      fallback: [
+        { name: '美联社 AP News',         url: 'https://apnews.com/world-news' },
+        { name: '路透社 Reuters',         url: 'https://www.reuters.com/world/' },
+        { name: 'CNN World',              url: 'https://edition.cnn.com/world' },
+        { name: 'BBC 美国频道',           url: 'https://www.bbc.com/news/world/us_and_canada' },
+        { name: '纽约时报 NYT',           url: 'https://www.nytimes.com/section/world' },
+        { name: '华盛顿邮报 WaPo',        url: 'https://www.washingtonpost.com/world/' },
+        { name: 'CBC 加拿大',              url: 'https://www.cbc.ca/news/world' },
+      ]
+    },
+    'me-africa': {
+      label: '🌍 中东与非洲',
+      feeds: [
+        { name: 'Al Jazeera 半岛',     url: 'https://www.aljazeera.com/xml/rss/all.xml' },
+        { name: 'BBC Africa',           url: 'https://feeds.bbci.co.uk/news/world/africa/rss.xml' },
+        { name: '中东之眼 MEE',         url: 'https://www.middleeasteye.net/rss/latest' },
+        { name: 'Africanews',           url: 'https://www.africanews.com/feed/rss' },
+        { name: '国土报 Haaretz',       url: 'https://www.haaretz.com/cmlink/1.4963638' },
+      ],
+      fallback: [
+        { name: 'Al Jazeera 半岛电视台', url: 'https://www.aljazeera.com/' },
+        { name: 'BBC 非洲频道',          url: 'https://www.bbc.com/news/world/africa' },
+        { name: '中东之眼 MEE',          url: 'https://www.middleeasteye.net/' },
+        { name: '全非网 AllAfrica',       url: 'https://allafrica.com/' },
+        { name: 'Africanews',             url: 'https://www.africanews.com/' },
+        { name: '国土报 Haaretz',        url: 'https://www.haaretz.com/' },
+      ]
+    },
+  },
+  // ---- 按主题分类 ----
+  topics: {
+    'business': {
+      label: '💼 商业',
+      feeds: [
+        { name: 'BBC Business',      url: 'https://feeds.bbci.co.uk/news/business/rss.xml' },
+        { name: 'CNBC Top News',     url: 'https://www.cnbc.com/id/100003114/device/rss/rss.html' },
+        { name: '路透社财经 Reuters', url: 'https://www.reuters.com/tools/rss' },
+        { name: '经济学人 Economist', url: 'https://www.economist.com/finance-and-economics/rss.xml' },
+        { name: '金融时报 FT',        url: 'https://www.ft.com/world/rss' },
+        { name: '彭博社 Bloomberg',   url: 'https://feeds.bloomberg.com/markets/news.rss' },
+      ],
+      fallback: [
+        { name: 'BBC 商业频道',       url: 'https://www.bbc.com/news/business' },
+        { name: 'CNBC',                url: 'https://www.cnbc.com/world/' },
+        { name: '彭博社 Bloomberg',    url: 'https://www.bloomberg.com/' },
+        { name: '经济学人 Economist',   url: 'https://www.economist.com/' },
+        { name: '金融时报 FT',         url: 'https://www.ft.com/' },
+      ]
+    },
+    'technology': {
+      label: '🔬 科技',
+      feeds: [
+        { name: 'BBC Technology',       url: 'https://feeds.bbci.co.uk/news/technology/rss.xml' },
+        { name: 'Wired Top',            url: 'https://www.wired.com/feed/rss' },
+        { name: 'The Verge',            url: 'https://www.theverge.com/rss/index.xml' },
+        { name: 'Ars Technica',         url: 'https://feeds.arstechnica.com/arstechnica/index' },
+        { name: 'TechCrunch',           url: 'https://techcrunch.com/feed/' },
+        { name: 'MIT Tech Review',       url: 'https://www.technologyreview.com/feed/' },
+        { name: 'Engadget',             url: 'https://www.engadget.com/rss.xml' },
+      ],
+      fallback: [
+        { name: 'BBC 科技频道',       url: 'https://www.bbc.com/news/technology' },
+        { name: 'Wired',               url: 'https://www.wired.com/' },
+        { name: 'The Verge',           url: 'https://www.theverge.com/' },
+        { name: 'Ars Technica',        url: 'https://arstechnica.com/' },
+        { name: 'TechCrunch',          url: 'https://techcrunch.com/' },
+      ]
+    },
+    'science': {
+      label: '🧪 科学',
+      feeds: [
+        { name: 'BBC Science',          url: 'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml' },
+        { name: 'Science Daily',        url: 'https://www.sciencedaily.com/rss/top.xml' },
+        { name: '国家地理 NatGeo',       url: 'https://www.nationalgeographic.com/rss/' },
+        { name: 'Nature 自然杂志',      url: 'https://www.nature.com/nature.rss' },
+        { name: 'Scientific American',   url: 'https://www.scientificamerican.com/feed/' },
+        { name: 'Phys.org 物理学',       url: 'https://phys.org/rss-feed/' },
+      ],
+      fallback: [
+        { name: 'BBC 科学与环境频道', url: 'https://www.bbc.com/news/science_and_environment' },
+        { name: 'Nature 自然杂志',     url: 'https://www.nature.com/' },
+        { name: 'Science Daily',       url: 'https://www.sciencedaily.com/' },
+        { name: '国家地理',            url: 'https://www.nationalgeographic.com/' },
+        { name: '科学美国人',          url: 'https://www.scientificamerican.com/' },
+      ]
+    },
+    'entertainment': {
+      label: '🎬 娱乐',
+      feeds: [
+        { name: 'BBC Entertainment',  url: 'https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml' },
+        { name: 'Variety 综艺',       url: 'https://variety.com/feed/' },
+        { name: 'People 人物',        url: 'https://people.com/feed/' },
+        { name: 'Rolling Stone 滚石', url: 'https://www.rollingstone.com/feed/' },
+        { name: 'Deadline 好莱坞',     url: 'https://deadline.com/feed/' },
+        { name: 'Billboard 公告牌',   url: 'https://www.billboard.com/feed/' },
+      ],
+      fallback: [
+        { name: 'BBC 娱乐频道',          url: 'https://www.bbc.com/news/entertainment_and_arts' },
+        { name: 'Variety 综艺杂志',      url: 'https://variety.com/' },
+        { name: 'People 人物杂志',       url: 'https://people.com/' },
+        { name: 'Rolling Stone 滚石',    url: 'https://www.rollingstone.com/' },
+        { name: 'Deadline',               url: 'https://deadline.com/' },
+        { name: '好莱坞报道 THR',         url: 'https://www.hollywoodreporter.com/' },
+        { name: '公告牌 Billboard',       url: 'https://www.billboard.com/' },
+        { name: '新浪娱乐',               url: 'https://ent.sina.com.cn/' },
+        { name: '豆瓣电影',               url: 'https://movie.douban.com/' },
+      ]
+    },
+  },
+};
+
+// 新闻源颜色标识（用于卡片左侧色条和标签）
+const SOURCE_COLORS = {
+  // BBC 系
+  'BBC':            '#bb1919',
+  'BBC World':      '#bb1919',
+  'BBC Asia':       '#bb1919',
+  'BBC US':         '#bb1919',
+  'BBC Africa':     '#bb1919',
+  'BBC China':      '#bb1919',
+  'BBC Business':   '#bb1919',
+  'BBC Technology': '#bb1919',
+  'BBC Science':    '#bb1919',
+  // 美国媒体
+  'CNN':            '#cc0000',
+  'CNN World':      '#cc0000',
+  'NYT':            '#333333',
+  '纽约时报':       '#333333',
+  'AP':             '#ff4400',
+  '美联社':         '#ff4400',
+  // 中东
+  'Al Jazeera':     '#f7931e',
+  'MEE':            '#e67e22',
+  '中东之眼':       '#e67e22',
+  'Haaretz':        '#0066a1',
+  '国土报':         '#0066a1',
+  // 欧洲
+  'Reuters':        '#ff8000',
+  '路透社':         '#ff8000',
+  'AFP':            '#0066a1',
+  '法新社':         '#0066a1',
+  'DW':             '#0099d7',
+  'France 24':      '#0193da',
+  'Guardian':       '#052962',
+  '卫报':           '#052962',
+  'Euronews':       '#2c3e9b',
+  // 中国
+  'Xinhua':         '#c41230',
+  '新华社':         '#c41230',
+  'China Daily':    '#0168b3',
+  '中国日报':       '#0168b3',
+  'CGTN':           '#d40000',
+  'Global Times':   '#002c5c',
+  '环球时报':       '#002c5c',
+  'People':         '#da251d',
+  '人民网':         '#da251d',
+  'ECNS':           '#003d80',
+  '中新社':         '#003d80',
+  'Diplomat':       '#1a5276',
+  '外交官':         '#1a5276',
+  // 亚太
+  'NHK':            '#1a2b5e',
+  'NHK World':      '#1a2b5e',
+  'SCMP':           '#00a0e9',
+  '南华早报':       '#00a0e9',
+  'Straits Times':  '#1b4a8b',
+  '海峡时报':       '#1b4a8b',
+  'Times of India': '#d32f2f',
+  '印度时报':       '#d32f2f',
+  'ABC':            '#3079b7',
+  'ABC 澳洲':       '#3079b7',
+  'Yonhap':         '#005eb8',
+  '韩联社':         '#005eb8',
+  // 非洲
+  'Africanews':     '#e98300',
+  // 商业/科技/科学
+  'CNBC':           '#1366d6',
+  'Economist':      '#e3120b',
+  '经济学人':       '#e3120b',
+  'Wired':          '#000000',
+  'The Verge':      '#bb86fc',
+  'Ars Technica':   '#ff4e00',
+  'TechCrunch':     '#0a9e01',
+  'Science Daily':  '#005596',
+  'NatGeo':         '#ffcc00',
+  '国家地理':       '#ffcc00',
+  'Nature':         '#000000',
+  '自然杂志':       '#000000',
+  // 娱乐
+  'Variety':        '#e82b70',
+  '综艺':           '#e82b70',
+  'People':         '#0077be',
+  '人物':           '#0077be',
+  'Rolling Stone':  '#e31c3d',
+  '滚石':           '#e31c3d',
+  'Billboard':      '#1db954',
+  '公告牌':         '#1db954',
+  'Hollywood':      '#daa520',
+  '好莱坞':         '#daa520',
+  // 中国国内
+  'Sixth Tone':     '#c41230',
+  '第六声':         '#c41230',
+  'Caixin':         '#00538a',
+  '财新':           '#00538a',
+  'CBC':            '#ed1c24',
+  '加拿大广播':     '#ed1c24',
+};
+
+// 来源权威分级（用于排序加权）
+var SOURCE_TIERS = {
+  // 一级：全球顶级通讯社 + BBC（影响力最大）
+  tier1: ['Reuters', '路透社', 'AP', '美联社', 'BBC', 'AFP'],
+  // 二级：主要国家/国际媒体
+  tier2: ['CNN', 'NYT', '纽约时报', 'Guardian', '卫报', 'DW', 'Al Jazeera', 'NHK', 'CNBC', 'Economist', '经济学人', 'Nature', '自然杂志'],
+  // 三级：其他（默认）
+};
+
+function getSourceTier(name) {
+  if (SOURCE_TIERS.tier1.some(function(t) { return name.indexOf(t) !== -1; })) return 3;
+  if (SOURCE_TIERS.tier2.some(function(t) { return name.indexOf(t) !== -1; })) return 2;
+  return 1;
+}
+
+/* ================================================================
+ *  实时热搜数据（由 Tavily 搜索更新）
+ *  ================================================================ */
+var TRENDING_TOPICS = [
+  { keyword: "US Iran strikes energy infrastructure", cn: "美拟打击伊朗能源设施 中东告急", url: "https://abcnews.com/International/wireStory/trump-threatens-strikes-iran-developments-middle-east-135282568" },
+  { keyword: "Hamas Gaza disarmament historic deal", cn: "哈马斯同意解除武装 加沙和平协议", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-1-2026/4015465" },
+  { keyword: "Hormuz tanker hit oil shipping collapse", cn: "霍尔木兹油轮遇袭 航运崩溃", url: "https://www.wionews.com/world/oil-tanker-hit-by-unknown-projectile-off-oman-as-us-iran-tensions-escalate-1785556874223" },
+  { keyword: "Spain Ceuta 50000 migrants Schengen crisis", cn: "西班牙休达移民危机 申根暂停", url: "https://www.bssnews.net/international/410639" },
+  { keyword: "Kyiv Russian deadly missile strike", cn: "俄导弹袭基辅 平民死伤", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
+  { keyword: "FIFA scraps 20 billion World Cup deal", cn: "FIFA取消200亿美元世界杯交易", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
+  { keyword: "Japan Kumamoto earthquake 35 dead", cn: "日本熊本地震35人遇难", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
+  { keyword: "China Chongqing landslide 51 dead", cn: "重庆山体滑坡51人遇难", url: "https://english.news.cn/" },
+  { keyword: "AI safety Claude OpenAI breach tests", cn: "Claude与OpenAI测试中突破隔离", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-1-2026/4015465" },
+  { keyword: "Korea KOSPI record 18 percent surge", cn: "韩国KOSPI单日暴涨18%", url: "https://finance.jrj.com.cn/2026/08/01081257978735.shtml" },
+];
+var TRENDING_UPDATED = "2026-08-02 14:00";
+
+/* ================================================================
+ *  工具函数
+ *  ================================================================ */
+
+/** HTML 标签剥离（防 XSS，只用 textContent） */
+function stripHtml(html) {
+  var div = document.createElement('div');
+  div.textContent = html || '';
+  return div.textContent;
+}
+
+/** 截断文本 */
+function truncate(text, maxLen) {
+  text = stripHtml(text);
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen).trimEnd() + '…';
+}
+
+/** 相对时间格式化 */
+function relativeTime(dateStr) {
+  var now = Date.now();
+  var date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '未知时间';
+  var diff = now - date.getTime();
+  var seconds = Math.floor(diff / 1000);
+  var minutes = Math.floor(seconds / 60);
+  var hours = Math.floor(minutes / 60);
+  var days = Math.floor(hours / 24);
+
+  if (seconds < 0)   return '刚刚';
+  if (minutes < 1)   return '刚刚';
+  if (minutes < 60)  return minutes + '分钟前';
+  if (hours < 2)     return '1小时前';
+  if (hours < 24)    return hours + '小时前';
+  if (days < 2)      return '昨天';
+  if (days < 7)      return days + '天前';
+  return (date.getMonth() + 1) + '月' + date.getDate() + '日';
+}
+
+/** 格式化为北京时间字符串 */
+function beijingTimeStr(dateInput) {
+  var d = new Date(dateInput);
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleString('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+}
+
+/** 获取新闻源的颜色 */
+function getSourceColor(name) {
+  for (var key in SOURCE_COLORS) {
+    if (name.indexOf(key) !== -1) return SOURCE_COLORS[key];
+  }
+  return '#888';
+}
+
+/* ================================================================
+ *  缓存管理
+ *  ================================================================ */
+var Cache = {
+  PREFIX: 'news_cache_',
+  TTL: 15 * 60 * 1000, // 15 分钟
+
+  key: function(sectionKey) {
+    return Cache.PREFIX + sectionKey;
+  },
+
+  get: function(sectionKey) {
+    try {
+      var raw = localStorage.getItem(Cache.key(sectionKey));
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (Date.now() - data.timestamp > Cache.TTL) return null; // 过期
+      return data;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  set: function(sectionKey, articles) {
+    try {
+      var data = { timestamp: Date.now(), articles: articles };
+      localStorage.setItem(Cache.key(sectionKey), JSON.stringify(data));
+    } catch (e) {
+      // localStorage 满了，清理旧缓存后重试一次
+      Cache.clearAll();
+      try {
+        var data = { timestamp: Date.now(), articles: articles };
+        localStorage.setItem(Cache.key(sectionKey), JSON.stringify(data));
+      } catch (e2) { /* 无解 */ }
+    }
+  },
+
+  getStale: function(sectionKey) {
+    // 获取过期但仍有用的缓存
+    try {
+      var raw = localStorage.getItem(Cache.key(sectionKey));
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  clearAll: function() {
+    try {
+      var keys = Object.keys(localStorage);
+      for (var i = 0; i < keys.length; i++) {
+        if (keys[i].indexOf(Cache.PREFIX) === 0) {
+          localStorage.removeItem(keys[i]);
+        }
+      }
+    } catch (e) { /* ignore */ }
+  }
+};
+
+/* ================================================================
+ *  主题管理
+ *  ================================================================ */
+var Theme = {
+  KEY: 'news_theme',
+
+  get: function() {
+    try {
+      var saved = localStorage.getItem(Theme.KEY);
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch (e) { /* ignore */ }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  },
+
+  set: function(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    try { localStorage.setItem(Theme.KEY, mode); } catch (e) { /* ignore */ }
+  },
+
+  toggle: function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    Theme.set(current === 'dark' ? 'light' : 'dark');
+    Theme.updateButton();
+  },
+
+  updateButton: function() {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var mode = document.documentElement.getAttribute('data-theme');
+    btn.innerHTML = mode === 'dark' ? '☀️ 亮色' : '🌙 暗色';
+  }
+};
+
+/* ================================================================
+ *  翻译模块
+ *  ================================================================ */
+var Translator = {
+  PREFIX: 'trans_',
+  MAX_CONCURRENT: 3,
+  TIMEOUT: 5000,
+  _queue: [],
+  _running: 0,
+  _cache: {},
+
+  /** 简易 hash */
+  _hash: function(text) {
+    var h = 0;
+    for (var i = 0; i < text.length; i++) {
+      h = ((h << 5) - h) + text.charCodeAt(i);
+      h = h | 0;
+    }
+    return Math.abs(h).toString(36);
+  },
+
+  /** 检查缓存 */
+  _getCache: function(text) {
+    var h = Translator._hash(text);
+    if (Translator._cache[h]) return Translator._cache[h];
+    try {
+      var raw = localStorage.getItem(Translator.PREFIX + h);
+      if (raw) {
+        Translator._cache[h] = raw;
+        return raw;
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  },
+
+  /** 写入缓存 */
+  _setCache: function(text, translation) {
+    var h = Translator._hash(text);
+    Translator._cache[h] = translation;
+    try { localStorage.setItem(Translator.PREFIX + h, translation); } catch (e) { /* ignore */ }
+  },
+
+  /**
+   * 翻译单条文本（返回 Promise<string>）
+   * 优先从缓存读取，缓存未命中则调 Google 翻译 API
+   */
+  translate: function(text) {
+    var cached = Translator._getCache(text);
+    if (cached) return Promise.resolve(cached);
+
+    // 纯中文或空文本直接返回
+    if (!text || /^[一-鿿\s\d\p{P}]+$/u.test(text)) {
+      Translator._setCache(text, text);
+      return Promise.resolve(text);
+    }
+
+    return new Promise(function(resolve) {
+      Translator._queue.push({ text: text, resolve: resolve });
+      Translator._processQueue();
+    });
+  },
+
+  /** 处理队列 */
+  _processQueue: function() {
+    while (Translator._running < Translator.MAX_CONCURRENT && Translator._queue.length > 0) {
+      var task = Translator._queue.shift();
+      Translator._running++;
+      Translator._doTranslate(task.text).then(function(result) {
+        task.resolve(result);
+        Translator._running--;
+        Translator._processQueue();
+      }).catch(function() {
+        // 翻译失败：缓存原文避免重复请求，返回原文
+        Translator._setCache(task.text, task.text);
+        task.resolve(task.text);
+        Translator._running--;
+        Translator._processQueue();
+      });
+    }
+  },
+
+  /** 调用 Google 翻译接口 */
+  _doTranslate: function(text) {
+    var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text);
+
+    return new Promise(function(resolve, reject) {
+      var controller = new AbortController();
+      var timeout = setTimeout(function() { controller.abort(); }, Translator.TIMEOUT);
+
+      fetch(url, { signal: controller.signal })
+        .then(function(res) {
+          clearTimeout(timeout);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          // Google 翻译返回格式：[[["译文", "原文", ...], ...], ...]
+          var translation = '';
+          if (data && data[0]) {
+            for (var i = 0; i < data[0].length; i++) {
+              if (data[0][i] && data[0][i][0]) {
+                translation += data[0][i][0];
+              }
+            }
+          }
+          translation = translation || text;
+          Translator._setCache(text, translation);
+          resolve(translation);
+        })
+        .catch(function() {
+          reject(new Error('翻译请求失败'));
+        });
+    });
+  },
+
+  /**批量翻译并更新 DOM */
+  translateCardTitles: function() {
+    var cards = document.querySelectorAll('.news-card');
+    cards.forEach(function(card) {
+      var translationEl = card.querySelector('.card-translation');
+      if (!translationEl) return;
+
+      var originalText = translationEl.dataset.original || '';
+      if (!originalText) return;
+
+      // 已有译文则跳过
+      if (translationEl.textContent && translationEl.textContent !== '翻译中…') return;
+
+      Translator.translate(originalText).then(function(result) {
+        translationEl.textContent = result;
+        translationEl.classList.remove('loading');
+      });
+    });
+  }
+};
+
+/* ================================================================
+ *  共鸣检测（同一事件被多家报道 = 重要新闻）
+ *  ================================================================ */
+function detectResonance(articles) {
+  // 停用词
+  var stopWords = ['the','a','an','is','are','was','were','be','been','being',
+    'have','has','had','do','does','did','will','would','shall','should','may',
+    'might','must','can','could','in','on','at','to','for','of','with','by',
+    'from','and','or','but','not','no','it','its','this','that','these','those',
+    'he','she','they','we','you','his','her','their','our','my','your','after',
+    'before','over','under','more','new','says','amid','into','as','up','out'];
+
+  // 为每篇文章提取关键词
+  articles.forEach(function(article) {
+    var words = article.title.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .split(/\s+/)
+      .filter(function(w) { return w.length > 3 && stopWords.indexOf(w) === -1; });
+    article._keywords = words.slice(0, 5); // 取前5个关键词
+    article.resonanceScore = 0;
+  });
+
+  // 热搜关键词加权：标题命中热搜词 → +2 共鸣分
+  var trendingKeywords = [];
+  TRENDING_TOPICS.forEach(function(t) {
+    t.keyword.toLowerCase().split(/\s+/).forEach(function(w) {
+      if (w.length > 3) trendingKeywords.push(w);
+    });
+  });
+
+  articles.forEach(function(article) {
+    var titleLower = article.title.toLowerCase();
+    var hitCount = 0;
+    trendingKeywords.forEach(function(kw) {
+      if (titleLower.indexOf(kw) !== -1) hitCount++;
+    });
+    if (hitCount >= 2) article.resonanceScore += 2; // 匹配热搜 → 加分
+    if (hitCount >= 1) article.resonanceScore += 1;
+  });
+
+  // 两两比较不同来源的文章
+  for (var i = 0; i < articles.length; i++) {
+    for (var j = i + 1; j < articles.length; j++) {
+      var a = articles[i], b = articles[j];
+      if (a.source === b.source) continue; // 同源不比较
+      if (!a._keywords || !b._keywords) continue;
+
+      // 计算共享关键词数
+      var shared = 0;
+      a._keywords.forEach(function(kw) {
+        if (b._keywords.indexOf(kw) !== -1) shared++;
+      });
+
+      // 共享 ≥2 个关键词 → 视为同一事件
+      if (shared >= 2) {
+        a.resonanceScore++;
+        b.resonanceScore++;
+      }
+    }
+  }
+
+  return articles;
+}
+
+/* ================================================================
+ *  API 层
+ *  ================================================================ */
+var API = {
+  BASE: 'https://api.rss2json.com/v1/api.json',
+  TIMEOUT: 10000, // 10 秒超时
+
+  /**
+   * 获取单个 RSS 源
+   * @returns {{ success: true, items: Array, feedName: string } | { success: false, error: string, feedName: string }}
+   */
+  fetchFeed: function(feedConfig) {
+    var url = API.BASE + '?rss_url=' + encodeURIComponent(feedConfig.url);
+    var controller = new AbortController();
+    var timeout = setTimeout(function() { controller.abort(); }, API.TIMEOUT);
+
+    return fetch(url, { signal: controller.signal })
+      .then(function(res) {
+        clearTimeout(timeout);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        if (data.status !== 'ok') throw new Error('API 返回异常状态: ' + data.status);
+        var items = data.items || [];
+        return {
+          success: true,
+          feedName: feedConfig.name,
+          items: items.map(function(item, index) {
+            var desc = stripHtml(item.description || '');
+            return {
+              title: stripHtml(item.title),
+              link: item.link,
+              description: truncate(item.description, 140),
+              pubDate: item.pubDate,
+              source: feedConfig.name,
+              sourceColor: getSourceColor(feedConfig.name),
+              thumbnail: item.thumbnail || '',
+              isTopStory: index === 0,         // 该源的第一条 = 头条
+              descLength: desc.length,          // 原始描述长度
+              isBreaking: /BREAKING|LIVE|URGENT/i.test(item.title) || (desc.length > 0 && desc.length < 50),
+            };
+          }),
+        };
+      })
+      .catch(function(err) {
+        clearTimeout(timeout);
+        return {
+          success: false,
+          feedName: feedConfig.name,
+          error: err.message === 'The user aborted a request.' ? '请求超时' : err.message,
+        };
+      });
+  },
+
+  /**
+   * 获取一个分类下的所有新闻源
+   */
+  fetchSection: function(sectionKey) {
+    var section = API._getSection(sectionKey);
+    if (!section) return Promise.resolve({ articles: [], feedStatus: [], sectionKey: sectionKey });
+
+    var promises = section.feeds.map(function(feed) {
+      return API.fetchFeed(feed);
+    });
+
+    return Promise.allSettled(promises).then(function(results) {
+      var allArticles = [];
+      var feedStatus = [];
+      var seenLinks = {};
+
+      results.forEach(function(result) {
+        if (result.status === 'fulfilled' && result.value.success) {
+          feedStatus.push({ name: result.value.feedName, ok: true });
+          result.value.items.forEach(function(article) {
+            if (!seenLinks[article.link]) {
+              seenLinks[article.link] = true;
+              allArticles.push(article);
+            }
+          });
+        } else {
+          var name = (result.status === 'fulfilled') ? result.value.feedName : '未知来源';
+          feedStatus.push({ name: name, ok: false });
+        }
+      });
+
+      // === 共鸣检测：同一事件被多家报道 → 标记为热议 ===
+      allArticles = detectResonance(allArticles);
+
+      // === 三因子排序：时间新鲜度 + 来源权威 + 共鸣分 ===
+      var now = Date.now();
+      allArticles.forEach(function(article) {
+        var hoursOld = (now - new Date(article.pubDate).getTime()) / (1000 * 60 * 60);
+        article._freshness = Math.max(0, 24 - hoursOld);        // 24小时内满分，之后衰减
+        article._authority = getSourceTier(article.source);     // 1~3 分
+        article._resonance = article.resonanceScore || 0;       // 0~5 分
+        article._totalScore = article._freshness + article._authority * 2 + article._resonance * 3;
+      });
+
+      allArticles.sort(function(a, b) {
+        return b._totalScore - a._totalScore;
+      });
+
+      return { articles: allArticles, feedStatus: feedStatus, sectionKey: sectionKey };
+    });
+  },
+
+  _getSection: function(sectionKey) {
+    if (FEED_CONFIG.regions[sectionKey]) return FEED_CONFIG.regions[sectionKey];
+    if (FEED_CONFIG.topics[sectionKey])  return FEED_CONFIG.topics[sectionKey];
+    return null;
+  },
+
+  _getAllSectionKeys: function() {
+    var keys = [];
+    for (var k in FEED_CONFIG.regions) { keys.push(k); }
+    for (var k2 in FEED_CONFIG.topics) { keys.push(k2); }
+    return keys;
+  }
+};
+
+/* ================================================================
+ *  UI 渲染
+ *  ================================================================ */
+var UI = {
+  /** 渲染内容区域 */
+  renderSection: function(sectionKey, articles, feedStatus, isStale) {
+    var area = document.getElementById('content-area');
+    var banner = document.getElementById('status-banner');
+
+    // 状态横幅
+    banner.className = 'status-banner';
+    banner.innerHTML = '';
+    banner.style.display = 'none';
+
+    if (isStale) {
+      banner.className = 'status-banner warning';
+      banner.innerHTML = '⚠️ 部分内容来自缓存，实时数据获取失败 <button onclick="App.refresh()">🔄 重试</button>';
+    }
+
+    if (articles.length === 0 && feedStatus.every(function(s) { return !s.ok; })) {
+      // 全部失败 → 三级回退：展示精选链接
+      UI.renderFallback(sectionKey);
+      return;
+    }
+
+    if (articles.length === 0) {
+      area.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>暂无新闻，请稍后刷新</p></div>';
+      return;
+    }
+
+    var html = '<div class="content-grid">';
+    articles.forEach(function(article) {
+      var color = article.sourceColor || '#888';
+      var hasThumb = article.thumbnail ? ' has-thumb' : '';
+      html += '<article class="news-card' + hasThumb + '" style="--card-accent: ' + color + '" data-link="' + UI._escapeAttr(article.link) + '">';
+
+      // 缩略图
+      if (article.thumbnail) {
+        html += '<img class="card-thumb" src="' + UI._escapeAttr(article.thumbnail) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';var p=document.createElement(\'div\');p.className=\'card-thumb-placeholder\';p.textContent=\'📷\';this.parentNode.insertBefore(p,this);this.remove()">';
+      }
+
+      // 卡片正文
+      html += '<div class="card-body">';
+
+      // 来源标签行 + 信号标签
+      html += '<div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">';
+      html += '<span class="card-source" style="color:' + color + '; background: ' + UI._colorMix(color, 0.1) + '">' + UI._escapeHTML(article.source) + '</span>';
+      // 信号标签
+      if (article.isTopStory && getSourceTier(article.source) >= 3) {
+        html += '<span class="signal-tag authoritative" title="一级权威来源的当日头条">⭐ 权威头条</span>';
+      } else if (article.isTopStory) {
+        html += '<span class="signal-tag top-story" title="该来源的当日头条">🔴 头条</span>';
+      }
+      if (article.resonanceScore >= 3) {
+        html += '<span class="signal-tag hot" title="被 ' + article.resonanceScore + ' 家不同媒体报道">🔥 热议</span>';
+      } else if (article.resonanceScore >= 1) {
+        html += '<span class="signal-tag warm" title="多家媒体关注">📢 关注</span>';
+      }
+      if (article.descLength > 200) {
+        html += '<span class="signal-tag in-depth" title="描述超过200字，可能为深度报道">📝 深度</span>';
+      }
+      if (article.isBreaking) {
+        html += '<span class="signal-tag breaking" title="突发/快讯">⚡ 快讯</span>';
+      }
+      html += '</div>';
+
+      html += '<h3 class="card-headline"><a href="' + UI._escapeAttr(article.link) + '" target="_blank" rel="noopener noreferrer">' + UI._escapeHTML(article.title) + '</a></h3>';
+      // 翻译占位
+      html += '<p class="card-translation" data-original="' + UI._escapeAttr(article.title) + '">翻译中…</p>';
+      if (article.description) {
+        html += '<p class="card-desc">' + UI._escapeHTML(article.description) + '</p>';
+      }
+      html += '<div class="card-meta">';
+      var bjTime = beijingTimeStr(article.pubDate);
+      html += '<time datetime="' + UI._escapeAttr(article.pubDate) + '" title="北京时间 ' + UI._escapeAttr(bjTime) + '">' + relativeTime(article.pubDate) + '</time>';
+      html += '<span class="card-arrow">→ 阅读原文</span>';
+      html += '</div>';
+      html += '</div>'; // .card-body
+
+      html += '</article>';
+    });
+    html += '</div>';
+
+    // 中国版面：追加官方媒体精选
+    if (sectionKey === 'china' && typeof CURATED_CHINA !== 'undefined' && CURATED_CHINA.length > 0) {
+      html += '<div style="grid-column:1/-1;margin:1.2rem 0 .5rem;padding-top:.8rem;border-top:2px solid var(--border)">';
+      html += '<h3 style="font-size:.9rem;color:var(--text-headline);margin-bottom:.4rem">🇨🇳 人民日报 · 新华社 今日精选</h3>';
+      html += '<p style="font-size:.75rem;color:var(--text-secondary);margin-bottom:.7rem">以下由搜索手动抓取，非 RSS 实时更新</p>';
+      html += '</div>';
+      CURATED_CHINA.forEach(function(a) {
+        var officialColor = '#c41230';
+        html += '<article class="news-card" style="--card-accent:' + officialColor + '">';
+        html += '<div class="card-body">';
+        html += '<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">';
+        html += '<span class="card-source" style="color:' + officialColor + ';background:' + UI._colorMix(officialColor,0.1) + '">' + UI._escapeHTML(a.source) + '</span>';
+        html += '<span class="signal-tag" style="background:#c41230;color:#fff;font-size:.65rem">🇨🇳 官方</span>';
+        html += '</div>';
+        html += '<h3 class="card-headline"><a href="' + UI._escapeAttr(a.link) + '" target="_blank" rel="noopener noreferrer">' + UI._escapeHTML(a.title) + '</a></h3>';
+        html += '<div class="card-meta">';
+        html += '<time>' + (a.date || '') + '</time>';
+        html += '<span class="card-arrow">→ 阅读原文</span>';
+        html += '</div>';
+        html += '</div></article>';
+      });
+    }
+
+    area.innerHTML = html;
+    banner.style.display = 'none';
+    area.classList.remove('switching');
+
+    // 检查双语模式状态并触发翻译
+    if (UI._isBilingual()) {
+      document.getElementById('main-content').classList.add('show-translation');
+      // 延迟触发翻译，让浏览器先渲染
+      setTimeout(function() { Translator.translateCardTitles(); }, 200);
+    }
+  },
+
+  /** 渲染回退链接 */
+  renderFallback: function(sectionKey) {
+    var area = document.getElementById('content-area');
+    var banner = document.getElementById('status-banner');
+
+    banner.className = 'status-banner error';
+    banner.innerHTML = '⚠️ 所有 RSS 源暂时无法连接，以下为推荐新闻网站直连 <button onclick="App.refresh()">🔄 重试</button>';
+
+    // 获取 fallback 链接
+    var fallbackLinks = [];
+    if (sectionKey === 'all') {
+      var seen = {};
+      for (var rk in FEED_CONFIG.regions) {
+        (FEED_CONFIG.regions[rk].fallback || []).forEach(function(link) {
+          if (!link.url) { fallbackLinks.push(link); } // 分组标题不去重
+          else if (!seen[link.url]) { seen[link.url] = true; fallbackLinks.push(link); }
+        });
+      }
+      for (var tk in FEED_CONFIG.topics) {
+        (FEED_CONFIG.topics[tk].fallback || []).forEach(function(link) {
+          if (!link.url) { fallbackLinks.push(link); }
+          else if (!seen[link.url]) { seen[link.url] = true; fallbackLinks.push(link); }
+        });
+      }
+    } else {
+      var section = API._getSection(sectionKey);
+      fallbackLinks = section ? (section.fallback || []) : [];
+    }
+
+    var html = '<div class="fallback-section">';
+    html += '<h3>📡 推荐新闻网站直连</h3>';
+    html += '<p>点击下方链接直接访问新闻网站主页</p>';
+    html += '<div class="fallback-grid">';
+    fallbackLinks.forEach(function(link) {
+      if (!link.url) {
+        // 空 URL = 分组标题
+        html += '<div class="fallback-header">' + UI._escapeHTML(link.name) + '</div>';
+      } else {
+        html += '<a class="fallback-link" href="' + UI._escapeAttr(link.url) + '" target="_blank" rel="noopener noreferrer">';
+        html += '<span>' + UI._escapeHTML(link.name) + '</span>';
+        html += '<span class="arrow">→</span>';
+        html += '</a>';
+      }
+    });
+    html += '</div></div>';
+    area.innerHTML = html;
+    area.classList.remove('switching');
+  },
+
+  /** 渲染骨架屏 */
+  renderSkeleton: function() {
+    var area = document.getElementById('content-area');
+    var banner = document.getElementById('status-banner');
+    banner.className = 'status-banner';
+    banner.innerHTML = '';
+    banner.style.display = 'none';
+
+    var html = '<div class="skeleton-grid">';
+    for (var i = 0; i < 6; i++) {
+      html += '<div class="skeleton-card">';
+      html += '<div class="skeleton-line short"></div>';
+      html += '<div class="skeleton-line title"></div>';
+      html += '<div class="skeleton-line title2"></div>';
+      html += '<div class="skeleton-line long"></div>';
+      html += '<div class="skeleton-line medium"></div>';
+      html += '</div>';
+    }
+    html += '</div>';
+    area.innerHTML = html;
+  },
+
+  /** 更新标签栏的状态指示点 */
+  updateTabDots: function(sectionKey, feedStatus) {
+    var tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(function(tab) {
+      if (tab.dataset.section !== sectionKey) return;
+      var dotsEl = tab.querySelector('.tab-feed-dots');
+      if (!dotsEl) return;
+      var html = '';
+      feedStatus.forEach(function(s) {
+        html += '<span class="dot ' + (s.ok ? 'ok' : 'fail') + '" title="' + UI._escapeAttr(s.name) + (s.ok ? ' ✓' : ' ✗') + '"></span>';
+      });
+      dotsEl.innerHTML = html;
+    });
+  },
+
+  /** 更新最后更新时间 */
+  updateTimestamp: function() {
+    var el = document.getElementById('last-updated');
+    el.textContent = '最后更新（北京时间）：' + beijingTimeStr(new Date());
+  },
+
+  // 辅助
+  _escapeHTML: function(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  },
+
+  _escapeAttr: function(str) {
+    return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  },
+
+  _colorMix: function(hex, alpha) {
+    // 简化版：返回 rgba
+    hex = hex.replace('#', '');
+    var r = parseInt(hex.substring(0,2), 16);
+    var g = parseInt(hex.substring(2,4), 16);
+    var b = parseInt(hex.substring(4,6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  },
+
+  _isBilingual: function() {
+    try {
+      return localStorage.getItem('news_bilingual') === 'true';
+    } catch (e) { return false; }
+  }
+};
+
+/* ================================================================
+ *  标签导航
+ *  ================================================================ */
+var Tabs = {
+  build: function() {
+    var bar = document.getElementById('tab-bar');
+    // 注意："全部"是合并标签，不对应配置中的某个分类
+    var html = '<button class="tab-btn active" data-section="all">全部 📋</button>';
+
+    for (var rk in FEED_CONFIG.regions) {
+      var r = FEED_CONFIG.regions[rk];
+      html += '<button class="tab-btn" data-section="' + rk + '">';
+      html += r.label;
+      html += '<span class="tab-feed-dots">';
+      r.feeds.forEach(function() {
+        html += '<span class="dot loading"></span>';
+      });
+      html += '</span>';
+      html += '</button>';
+    }
+
+    for (var tk in FEED_CONFIG.topics) {
+      var t = FEED_CONFIG.topics[tk];
+      html += '<button class="tab-btn" data-section="' + tk + '">';
+      html += t.label;
+      html += '<span class="tab-feed-dots">';
+      t.feeds.forEach(function() {
+        html += '<span class="dot loading"></span>';
+      });
+      html += '</span>';
+      html += '</button>';
+    }
+
+    bar.innerHTML = html;
+  },
+
+  switchTo: function(sectionKey) {
+    var tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(function(tab) {
+      if (tab.dataset.section === sectionKey) {
+        tab.classList.add('active');
+        // 移动端自动滚动到当前标签
+        if (window.innerWidth < 640) {
+          tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+  }
+};
+
+/* ================================================================
+ *  应用控制器
+ *  ================================================================ */
+var App = {
+  currentSection: null,
+  pendingRequests: {},
+
+  init: function() {
+    // 应用主题
+    Theme.set(Theme.get());
+    Theme.updateButton();
+
+    // 应用双语模式偏好
+    App._initBilingual();
+
+    // 构建标签导航
+    Tabs.build();
+
+    // 标签点击
+    document.getElementById('tab-bar').addEventListener('click', function(e) {
+      var btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      var sk = btn.dataset.section;
+      if (sk) App.loadSection(sk);
+    });
+
+    document.getElementById('refresh-btn').addEventListener('click', function() {
+      App.refresh();
+    });
+
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      Theme.toggle();
+    });
+
+    document.getElementById('bilingual-btn').addEventListener('click', function() {
+      App._toggleBilingual();
+    });
+
+    // 标签栏左右箭头
+    var tabBar = document.getElementById('tab-bar');
+    document.getElementById('tab-arrow-left').addEventListener('click', function() {
+      tabBar.scrollBy({ left: -220, behavior: 'smooth' });
+    });
+    document.getElementById('tab-arrow-right').addEventListener('click', function() {
+      tabBar.scrollBy({ left: 220, behavior: 'smooth' });
+    });
+
+    // 监听系统主题变更
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      // 仅在没有手动设置时跟随系统
+      var saved = null;
+      try { saved = localStorage.getItem(Theme.KEY); } catch (ex) {}
+      if (!saved) {
+        Theme.set(e.matches ? 'dark' : 'light');
+        Theme.updateButton();
+      }
+    });
+
+    // 渲染热搜面板
+    App._renderTrending();
+
+    // 加载默认分区
+    App.loadSection('all');
+    // 安全兜底：15秒后如果还没渲染出任何内容，强制显示回退
+    setTimeout(function() {
+      var area = document.getElementById('content-area');
+      if (!area) return;
+      var hasCards = area.querySelector('.news-card');
+      var hasFallback = area.querySelector('.fallback-section');
+      if (!hasCards && !hasFallback) {
+        UI.renderFallback(App.currentSection || 'all');
+        area.classList.remove('switching');
+      }
+    }, 15000);
+  },
+
+  _renderTrending: function() {
+    var panel = document.getElementById('trending-panel');
+    if (!panel) return;
+    // 清空旧标签（保留 label 和 updated）
+    var existing = panel.querySelectorAll('.trending-tag');
+    existing.forEach(function(el) { el.remove(); });
+    // 渲染热搜标签
+    var updatedEl = document.getElementById('trending-updated');
+    TRENDING_TOPICS.forEach(function(topic) {
+      var a = document.createElement('a');
+      a.className = 'trending-tag';
+      a.href = topic.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = topic.cn ? topic.cn + ' ' + topic.keyword : topic.keyword;
+      a.title = topic.keyword;
+      panel.insertBefore(a, updatedEl);
+    });
+    if (updatedEl && TRENDING_UPDATED) {
+      updatedEl.textContent = '更新于 ' + TRENDING_UPDATED;
+    }
+  },
+
+  _initBilingual: function() {
+    try {
+      var on = localStorage.getItem('news_bilingual') === 'true';
+    } catch (e) { var on = false; }
+    if (on) {
+      document.getElementById('main-content').classList.add('show-translation');
+      document.getElementById('bilingual-btn').classList.add('active');
+    }
+  },
+
+  _toggleBilingual: function() {
+    var main = document.getElementById('main-content');
+    var btn = document.getElementById('bilingual-btn');
+    var on = !main.classList.contains('show-translation');
+
+    if (on) {
+      main.classList.add('show-translation');
+      btn.classList.add('active');
+      // 触发翻译
+      setTimeout(function() { Translator.translateCardTitles(); }, 100);
+    } else {
+      main.classList.remove('show-translation');
+      btn.classList.remove('active');
+    }
+
+    try { localStorage.setItem('news_bilingual', on ? 'true' : 'false'); } catch (e) {}
+  },
+
+  loadSection: function(sectionKey) {
+    if (App.currentSection === sectionKey) return; // 不重复加载
+    Tabs.switchTo(sectionKey);
+    App.currentSection = sectionKey;
+
+    // 内容区切换动画
+    var contentArea = document.getElementById('content-area');
+    contentArea.classList.add('switching');
+    UI.renderSkeleton();
+
+    if (sectionKey === 'all') {
+      App._loadAllSections();
+    } else {
+      App._loadOneSection(sectionKey);
+    }
+
+    // 渲染完成后移除切换状态（在 renderSection/renderFallback 中处理）
+  },
+
+  _loadOneSection: function(sectionKey, useCache) {
+    if (useCache === undefined) useCache = true;
+
+    // 先查缓存
+    if (useCache) {
+      var cached = Cache.get(sectionKey);
+      if (cached && cached.articles.length > 0) {
+        // 直接渲染缓存内容
+        var status = [];
+        var section = API._getSection(sectionKey);
+        if (section) {
+          section.feeds.forEach(function(f) { status.push({ name: f.name, ok: true }); });
+        }
+        UI.renderSection(sectionKey, cached.articles.slice(0, 50), status, true);
+        UI.updateTabDots(sectionKey, status);
+        UI.updateTimestamp();
+
+        // 后台静默刷新
+        App._fetchAndCache(sectionKey, false);
+        return;
+      }
+    }
+
+    // 无缓存 → 显示骨架屏并请求
+    UI.renderSkeleton();
+
+    // 防重复请求
+    if (App.pendingRequests[sectionKey]) return;
+    App.pendingRequests[sectionKey] = true;
+
+    App._fetchAndCache(sectionKey, true);
+  },
+
+  _loadAllSections: function() {
+    var allKeys = API._getAllSectionKeys();
+    var loadedCount = 0;
+    var allArticles = [];
+    var allStatus = [];
+    var seenLinks = {};
+    var usedCache = false;
+
+    UI.renderSkeleton();
+
+    allKeys.forEach(function(sectionKey) {
+      var cached = Cache.get(sectionKey);
+      if (cached && cached.articles.length > 0) {
+        usedCache = true;
+        var section = API._getSection(sectionKey);
+        if (section) {
+          section.feeds.forEach(function(f) { allStatus.push({ name: f.name, ok: true }); });
+        }
+        cached.articles.forEach(function(article) {
+          if (!seenLinks[article.link]) {
+            seenLinks[article.link] = true;
+            allArticles.push(article);
+          }
+        });
+        loadedCount++;
+      }
+    });
+
+    // 所有分区都有缓存 → 直接显示
+    if (loadedCount === allKeys.length && allArticles.length > 0) {
+      allArticles = detectResonance(allArticles);
+      var now1 = Date.now();
+      allArticles.forEach(function(a) {
+        var ho = (now1 - new Date(a.pubDate).getTime()) / (1000*60*60);
+        a._freshness = Math.max(0, 24 - ho);
+        a._authority = getSourceTier(a.source);
+        a._totalScore = a._freshness + a._authority * 2 + (a.resonanceScore || 0) * 3;
+      });
+      allArticles.sort(function(a, b) { return b._totalScore - a._totalScore; });
+      UI.renderSection('all', allArticles.slice(0, 100), allStatus, true);
+      UI.updateTabDots('all', allStatus);
+      UI.updateTimestamp();
+    }
+
+    // 同时请求所有分区的最新数据
+    var promises = allKeys.map(function(sectionKey) {
+      return API.fetchSection(sectionKey);
+    });
+
+    Promise.allSettled(promises).then(function(results) {
+      var freshArticles = [];
+      var freshStatus = [];
+      var freshSeen = {};
+
+      results.forEach(function(result) {
+        if (result.status === 'fulfilled' && result.value) {
+          // 缓存
+          if (result.value.articles.length > 0) {
+            Cache.set(result.value.sectionKey, result.value.articles);
+          }
+          result.value.feedStatus.forEach(function(s) { freshStatus.push(s); });
+          result.value.articles.forEach(function(article) {
+            if (!freshSeen[article.link]) {
+              freshSeen[article.link] = true;
+              freshArticles.push(article);
+            }
+          });
+        }
+      });
+
+      if (freshArticles.length > 0) {
+        freshArticles = detectResonance(freshArticles);
+        var now2 = Date.now();
+        freshArticles.forEach(function(a) {
+          var ho = (now2 - new Date(a.pubDate).getTime()) / (1000*60*60);
+          a._freshness = Math.max(0, 24 - ho);
+          a._authority = getSourceTier(a.source);
+          a._totalScore = a._freshness + a._authority * 2 + (a.resonanceScore || 0) * 3;
+        });
+        freshArticles.sort(function(a, b) { return b._totalScore - a._totalScore; });
+        UI.renderSection('all', freshArticles.slice(0, 100), freshStatus, false);
+        UI.updateTabDots('all', freshStatus);
+      } else if (!usedCache) {
+        // 全部失败且无缓存 → 显示回退直链
+        UI.renderFallback('all');
+      }
+      UI.updateTimestamp();
+    }).catch(function() {
+      if (!usedCache) UI.renderFallback('all');
+      UI.updateTimestamp();
+    });
+  },
+
+  _fetchAndCache: function(sectionKey, updateUI) {
+    API.fetchSection(sectionKey).then(function(result) {
+      App.pendingRequests[sectionKey] = false;
+
+      if (result.articles.length > 0) {
+        Cache.set(sectionKey, result.articles);
+      }
+
+      if (updateUI && App.currentSection === sectionKey) {
+        if (result.articles.length > 0) {
+          UI.renderSection(sectionKey, result.articles.slice(0, 50), result.feedStatus, false);
+        } else {
+          // 全部失败，尝试过期缓存
+          var stale = Cache.getStale(sectionKey);
+          if (stale && stale.articles.length > 0) {
+            UI.renderSection(sectionKey, stale.articles.slice(0, 50), result.feedStatus, true);
+          } else {
+            UI.renderFallback(sectionKey);
+          }
+        }
+        UI.updateTabDots(sectionKey, result.feedStatus);
+        UI.updateTimestamp();
+      }
+    }).catch(function() {
+      // API 彻底失败（网络错误/超时）
+      App.pendingRequests[sectionKey] = false;
+      if (updateUI && App.currentSection === sectionKey) {
+        var stale = Cache.getStale(sectionKey);
+        if (stale && stale.articles.length > 0) {
+          var st = [];
+          var sec = API._getSection(sectionKey);
+          if (sec) sec.feeds.forEach(function(f) { st.push({ name: f.name, ok: false }); });
+          UI.renderSection(sectionKey, stale.articles.slice(0, 50), st, true);
+          UI.updateTabDots(sectionKey, st);
+        } else {
+          UI.renderFallback(sectionKey);
+        }
+        UI.updateTimestamp();
+      }
+    });
+  },
+
+  refresh: function() {
+    // 清除当前分区缓存
+    if (App.currentSection === 'all') {
+      Cache.clearAll();
+    } else {
+      try { localStorage.removeItem(Cache.key(App.currentSection)); } catch (e) {}
+    }
+    App.loadSection(App.currentSection);
+  }
+};
+
+/* ================================================================
+ *  启动应用
+ *  ================================================================ */
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() { App.init(); });
+} else {
+  App.init();
+}
+
+})();
+</script>
+
+</body>
+</html>
