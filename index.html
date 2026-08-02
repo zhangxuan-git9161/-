@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -1353,7 +1353,7 @@ var Theme = {
  *  翻译模块
  *  ================================================================ */
 var Translator = {
-  PREFIX: 'trans_',
+  PREFIX: 'tr2_',
   MAX_CONCURRENT: 3,
   TIMEOUT: 5000,
   _queue: [],
@@ -1454,9 +1454,11 @@ var Translator = {
               }
             }
           }
-          translation = translation || text;
-          Translator._setCache(text, translation);
-          resolve(translation);
+          // 只有翻译成功才缓存，失败时不把原文当译文存
+          if (translation && translation !== text) {
+            Translator._setCache(text, translation);
+          }
+          resolve(translation || text);
         })
         .catch(function() {
           reject(new Error('翻译请求失败'));
