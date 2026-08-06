@@ -1454,11 +1454,13 @@ var Translator = {
               }
             }
           }
-          // 只有翻译成功才缓存，失败时不把原文当译文存
+          // API 返回空或和原文相同 = 翻译失败，返回错误标记
           if (translation && translation !== text) {
             Translator._setCache(text, translation);
+            resolve(translation);
+          } else {
+            resolve('[翻译失败]'); // 不缓存，不返回英文冒充翻译
           }
-          resolve(translation || text);
         })
         .catch(function() {
           reject(new Error('翻译请求失败'));
@@ -1480,8 +1482,18 @@ var Translator = {
       if (translationEl.textContent && translationEl.textContent !== '翻译中…') return;
 
       Translator.translate(originalText).then(function(result) {
-        translationEl.textContent = result;
-        translationEl.classList.remove('loading');
+        if (result === '[翻译失败]') {
+          // 翻译失败：保持隐藏，不显示英文冒充译文
+          translationEl.textContent = '';
+          translationEl.classList.add('loading');
+        } else {
+          translationEl.textContent = result;
+          translationEl.classList.remove('loading');
+        }
+      }).catch(function() {
+        // 异常：同样不显示英文
+        translationEl.textContent = '';
+        translationEl.classList.add('loading');
       });
     });
   }
