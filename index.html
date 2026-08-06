@@ -1181,18 +1181,18 @@ function getSourceTier(name) {
  *  实时热搜数据（由 Tavily 搜索更新）
  *  ================================================================ */
 var TRENDING_TOPICS = [
-  { keyword: "Trump cancels Iran strike pending deal", cn: "特朗普叫停打击伊朗 等签和平协议", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-2-2026/4016071" },
-  { keyword: "Hormuz blockade US gas 4 dollars surge", cn: "霍尔木兹封锁 美国油价飙至$4.11", url: "https://www.vietnam.vn/en/tin-quoc-te-ngay-2-8-who-canh-bao-dich-ebola-tai-congo-phong-toa-eo-bien-hormuz-day-gia-hang-hoa-tai-my-tang-cao" },
-  { keyword: "Hamas disarm Gaza Israel strikes continue", cn: "哈马斯同意解除武装 以军继续空袭", url: "https://uat.apnews.com/article/trump-iran-strait-hormuz-israel-gaza-mideast-e61e88c14d8aca48c1c56368650baea5" },
-  { keyword: "DRC Ebola largest outbreak 3605 deaths", cn: "刚果埃博拉最大爆发 3605例1587死", url: "https://www.vietnam.vn/en/tin-quoc-te-ngay-2-8-who-canh-bao-dich-ebola-tai-congo-phong-toa-eo-bien-hormuz-day-gia-hang-hoa-tai-my-tang-cao" },
-  { keyword: "Ceuta Spain 69500 migrants returned EU", cn: "西班牙休达近7万移民遣返 EU紧急会议", url: "http://english.news.cn/20260802/e759508987454ac1b88ecbc3718c58c2/c.html" },
-  { keyword: "Moscow restaurant bombing 3 dead 21 hurt", cn: "莫斯科餐厅爆炸 3死21伤", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-2-2026/4016071" },
-  { keyword: "Nepal avalanche Nirmal Purja climber dead", cn: "尼泊尔雪崩 传奇登山家Purja遇难", url: "https://us.cnn.com/2026/08/02/world/video/avalanche-climber-nirmal-purja-dead-search-for-missing-vrtc-digvid" },
-  { keyword: "Kyiv massive Russian missile 9 dead", cn: "俄大规模导弹袭基辅 9人遇难", url: "http://www.china.org.cn/world/Off_the_Wire/2026-08/02/content_118629980.shtml" },
-  { keyword: "Peru Nazca plane crash 13 dead tourists", cn: "秘鲁纳斯卡飞机坠毁 13人遇难", url: "https://www.abc.net.au./listen/programs/abc-news-top-stories/fuel-excise-cut-to-end-peru-plane-crash-latest-news-just-in/106987302" },
-  { keyword: "WMO El Nino August October extreme weather", cn: "WMO:厄尔尼诺8-10月持续增强", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-2-2026/4016071" },
+  { keyword: "Houthi Red Sea tanker attack oil surge", cn: "胡塞红海袭油轮 油价反弹", url: "https://www.rte.ie/news/business/2026/0805/1586566-world-oil-prices/" },
+  { keyword: "North Korea ballistic missile Sea of Japan", cn: "朝鲜再射弹道导弹 落入日本海", url: "https://tass.com/world/2169591" },
+  { keyword: "Germany Leipzig airport explosive drone", cn: "德国机场发现携炸药无人机 威胁升级", url: "https://k.sina.com.cn/article_1784473157_6a5ce64502003ptfm.html" },
+  { keyword: "Hormuz tanker two explosions Oman Kumzar", cn: "霍尔木兹油轮连爆两声 阿曼外海", url: "https://news.cnr.cn/sq/20260806/t20260806_527749987.shtml" },
+  { keyword: "Gaza strikes kill dozens mediators condemn", cn: "加沙空袭致数十死 调解方谴责", url: "http://www.china.org.cn/2026-08/04/content_118632895.shtml" },
+  { keyword: "Israel Qalandia refugee camp raid day 2", cn: "以军连续两日突袭难民营 3重伤", url: "https://f.aa.com.tr/en/middle-east/israeli-army-continues-attacks-on-qalandia-camp-for-2nd-day-injuring-palestinians/4019708" },
+  { keyword: "Hamas disarmament Board of Peace Netanyahu", cn: "哈马斯解除武装过渡 和平委员会推动", url: "http://www.china.org.cn/2026-08/04/content_118632895.shtml" },
+  { keyword: "Russia Ukraine Kursk casualties 270 dead", cn: "俄乌库尔斯克交火 270人阵亡", url: "https://tass.com/world/2169591" },
+  { keyword: "Kuwait Mubarak port inaugurate Iraq tensions", cn: "科威特穆巴拉克港启用 伊拉克不满", url: "https://www.aa.com.tr/en/middle-east/israeli-army-continues-attacks-on-qalandia-camp-for-2nd-day-injuring-palestinians/4019708" },
+  { keyword: "Saudi MBS Trump push for Mideast de-escalation", cn: "沙特王储促特朗普推动中东降温", url: "http://www.china.org.cn/2026-08/04/content_118632895.shtml" },
 ];
-var TRENDING_UPDATED = "2026-08-02 17:00";
+var TRENDING_UPDATED = "2026-08-06 12:00";
 
 /* ================================================================
  *  工具函数
