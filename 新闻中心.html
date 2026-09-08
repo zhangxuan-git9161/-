@@ -857,16 +857,16 @@ a { color: inherit; text-decoration: none; }
  *  中国官方媒体报道精选（手动更新 2026-08-01）
  *  ================================================================ */
 var CURATED_CHINA = [
-  // 人民日报 2026-08-02
-  { title: '以"第一"之名赴强军之约——庆祝建军99周年（强军路上）', source: '人民日报', link: 'https://www.peopleapp.com/column/30052823154-500007629882', date: '2026-08-02', type: 'official' },
-  { title: '不断创造高质量发展新业绩（今日谈）', source: '人民日报', link: 'https://www.ts.cn/xwzx/gnxw/202608/t20260802_35746436.shtml', date: '2026-08-02', type: 'official' },
-  { title: '谋幸福——深刻认识"最本质的特征"和"最大优势"', source: '人民日报', link: 'http://news.cyol.com/gb/news/articles/2026-08/02/content_5xE9e0F0dm.html', date: '2026-08-02', type: 'official' },
-  { title: '中方在联合国举行2026世界人工智能大会吹风会', source: '人民日报', link: 'https://cpc.people.com.cn/n1/2026/0802/c64387-40772297.html', date: '2026-08-02', type: 'official' },
-  // 新华社 2026-08-02
-  { title: '多个重大工程稳步推进：平陆运河通水、三峡新通道开工', source: '新华社', link: 'https://news.cri.cn/20260802/e02adefd-1ab4-49b2-986a-45a44042a8d5.html', date: '2026-08-02', type: 'official' },
-  { title: 'H1 GDP 69.6 trillion yuan +4.7%; industrial profits +18.7%', source: '新华社', link: 'http://chinaview.cn/20260801/7b4519c356b84b7aaaf5e85c7546ab19/c.html', date: '2026-08-02', type: 'official' },
-  { title: '我国智能算力同比增长177% Kimi K3开源模型发布', source: '新华社', link: 'https://english.news.cn/', date: '2026-08-02', type: 'official' },
-  { title: '景德镇手工瓷业遗存列入世界遗产 中国达61项', source: '新华社', link: 'http://www.china.org.cn/world/Off_the_Wire/2026-08/01/content_118628796.shtml', date: '2026-08-02', type: 'official' },
+  // 人民日报
+  { title: '东风浩荡开新局——以习近平经济思想指引高质量发展', source: '人民日报/新华社', link: 'http://paper.people.com.cn/rmrb/pc/content/202608/04/content_30172943.html', date: '2026-08-04', type: 'official' },
+  { title: '蔡奇看望慰问北戴河暑期休假专家 主题"奋进十五五"', source: '人民日报', link: 'http://paper.people.com.cn/rmrb/pc/content/202608/04/content_30172946.html', date: '2026-08-04', type: 'official' },
+  { title: '李强主持国务院常务会议：核准四个核电项目', source: '人民日报', link: 'http://scsqw.org.cn/gzdt/zyhy/gwyxx/content_201743', date: '2026-08-01', type: 'official' },
+  { title: '我国成功发射卫星互联网低轨23组卫星', source: '人民日报', link: 'http://cpc-app.people.cn/n1/2026/0805/c64387-40774097.html', date: '2026-08-05', type: 'official' },
+  // 新华社
+  { title: '外交部：中国愿持续向非洲国家提供抗疫支持', source: '新华社', link: 'https://world-app.people.cn/n1/2026/0805/c1002-40773966.html', date: '2026-08-05', type: 'official' },
+  { title: '上半年GDP增长4.7% 新动能贡献率超四成', source: '新华社', link: 'https://m.thepaper.cn/newsDetail_forward_33718132', date: '2026-08-04', type: 'official' },
+  { title: '上半年汽车出口531万辆增53% 首个国产万卡AI集群投用', source: '新华社', link: 'http://paper.people.com.cn/rmrb/pc/content/202608/04/content_30172943.html', date: '2026-08-04', type: 'official' },
+  { title: '习近平签署通令给杨勇记国防科技一等功', source: '新华社', link: 'http://cpc-app.people.cn/n1/2026/0801/c64094-40772030.html', date: '2026-08-01', type: 'official' },
 ];
 
 const FEED_CONFIG = {
@@ -1181,18 +1181,18 @@ function getSourceTier(name) {
  *  实时热搜数据（由 Tavily 搜索更新）
  *  ================================================================ */
 var TRENDING_TOPICS = [
-  { keyword: "US Iran strikes energy infrastructure", cn: "美拟打击伊朗能源设施 中东告急", url: "https://abcnews.com/International/wireStory/trump-threatens-strikes-iran-developments-middle-east-135282568" },
-  { keyword: "Hamas Gaza disarmament historic deal", cn: "哈马斯同意解除武装 加沙和平协议", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-1-2026/4015465" },
-  { keyword: "Hormuz tanker hit oil shipping collapse", cn: "霍尔木兹油轮遇袭 航运崩溃", url: "https://www.wionews.com/world/oil-tanker-hit-by-unknown-projectile-off-oman-as-us-iran-tensions-escalate-1785556874223" },
-  { keyword: "Spain Ceuta 50000 migrants Schengen crisis", cn: "西班牙休达移民危机 申根暂停", url: "https://www.bssnews.net/international/410639" },
-  { keyword: "Kyiv Russian deadly missile strike", cn: "俄导弹袭基辅 平民死伤", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
-  { keyword: "FIFA scraps 20 billion World Cup deal", cn: "FIFA取消200亿美元世界杯交易", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
-  { keyword: "Japan Kumamoto earthquake 35 dead", cn: "日本熊本地震35人遇难", url: "https://en.nhandan.vn/world-news-in-brief-august-1-post165029.html" },
-  { keyword: "China Chongqing landslide 51 dead", cn: "重庆山体滑坡51人遇难", url: "https://english.news.cn/" },
-  { keyword: "AI safety Claude OpenAI breach tests", cn: "Claude与OpenAI测试中突破隔离", url: "https://www.aa.com.tr/en/world/morning-briefing-aug-1-2026/4015465" },
-  { keyword: "Korea KOSPI record 18 percent surge", cn: "韩国KOSPI单日暴涨18%", url: "https://finance.jrj.com.cn/2026/08/01081257978735.shtml" },
+  { keyword: "Russia Ukraine US envoys peace talks halt strikes", cn: "美特使斡旋 俄乌暂停互袭对方首都三天", url: "https://finance.sina.com.cn/jjxw/2026-09-06/doc-iniqvrfc9787296.shtml" },
+  { keyword: "US Iran oil tanker attacks Strait Hormuz", cn: "美伊互袭油轮 霍尔木兹局势升级", url: "https://finance.sina.com.cn/jjxw/2026-09-06/doc-iniqvrfc9787296.shtml" },
+  { keyword: "Germany AfD wins Saxony-Anhalt state election", cn: "德国选择党赢得州议会选举 极右翼首次执政", url: "http://english.news.cn/20260907/04d7bd97c4864aacab77cb438f6efe4c/c.html" },
+  { keyword: "Nepal floods 1344 dead 4898 missing", cn: "尼泊尔洪灾已致1344人遇难", url: "https://wap.ycwb.com/ikimvkbtkm/content_54288887.htm" },
+  { keyword: "China Xizang mudslide 43 dead 519 missing", cn: "西藏吉隆泥石流致43人遇难519人失联", url: "http://english.news.cn/20260907/04d7bd97c4864aacab77cb438f6efe4c/c.html" },
+  { keyword: "China special treasury bonds banks capital injection", cn: "财政部发3000亿特别国债 注资8家金融机构", url: "https://www.toutiao.com/article/7682335840109969939/" },
+  { keyword: "Amazon cargo plane crash Miami airport", cn: "亚马逊货机在迈阿密机场坠毁 5人遇难", url: "https://news.qq.com/rain/a/20260907A02MUE00" },
+  { keyword: "Israel Lebanon Gaza eight foreign ministers condemn", cn: "以色列再袭黎巴嫩 八国外长谴责加沙迁离言论", url: "https://finance.sina.com.cn/wm/2026-09-07/doc-iniqyeue6344445.shtml" },
+  { keyword: "Indonesia Anak Krakatau volcano eruption flights", cn: "印尼喀拉喀托火山喷发 数百航班取消", url: "http://english.news.cn/20260907/04d7bd97c4864aacab77cb438f6efe4c/c.html" },
+  { keyword: "Yemen fighting Houthi Taiz Hodeidah 117 dead", cn: "也门交火4天致117人死亡", url: "http://english.news.cn/20260907/04d7bd97c4864aacab77cb438f6efe4c/c.html" },
 ];
-var TRENDING_UPDATED = "2026-08-02 14:00";
+var TRENDING_UPDATED = "2026-09-07 20:00";
 
 /* ================================================================
  *  工具函数
@@ -1393,7 +1393,7 @@ var Translator = {
 
   /**
    * 翻译单条文本（返回 Promise<string>）
-   * 优先从缓存读取，缓存未命中则调 Google 翻译 API
+   * 优先从缓存读取，缓存未命中则调 MyMemory 翻译 API
    */
   translate: function(text) {
     var cached = Translator._getCache(text);
@@ -1421,18 +1421,17 @@ var Translator = {
         Translator._running--;
         Translator._processQueue();
       }).catch(function() {
-        // 翻译失败：缓存原文避免重复请求，返回原文
-        Translator._setCache(task.text, task.text);
-        task.resolve(task.text);
+        // 翻译失败：不缓存、不返回英文冒充译文，交给上层按失败处理
+        task.resolve('[翻译失败]');
         Translator._running--;
         Translator._processQueue();
       });
     }
   },
 
-  /** 调用 Google 翻译接口 */
+  /** 调用 MyMemory 免费翻译接口 */
   _doTranslate: function(text) {
-    var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text);
+    var url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|zh-CN';
 
     return new Promise(function(resolve, reject) {
       var controller = new AbortController();
@@ -1445,20 +1444,18 @@ var Translator = {
           return res.json();
         })
         .then(function(data) {
-          // Google 翻译返回格式：[[["译文", "原文", ...], ...], ...]
+          // MyMemory 返回格式：{ responseData: { translatedText: "译文" }, responseStatus: 200 }
           var translation = '';
-          if (data && data[0]) {
-            for (var i = 0; i < data[0].length; i++) {
-              if (data[0][i] && data[0][i][0]) {
-                translation += data[0][i][0];
-              }
-            }
+          if (data && data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+            translation = String(data.responseData.translatedText).replace(/^\s+|\s+$/g, '');
           }
-          // 只有翻译成功才缓存，失败时不把原文当译文存
+          // 返回空或和原文相同 = 翻译失败，返回错误标记
           if (translation && translation !== text) {
             Translator._setCache(text, translation);
+            resolve(translation);
+          } else {
+            resolve('[翻译失败]'); // 不缓存，不返回英文冒充翻译
           }
-          resolve(translation || text);
         })
         .catch(function() {
           reject(new Error('翻译请求失败'));
@@ -1480,8 +1477,18 @@ var Translator = {
       if (translationEl.textContent && translationEl.textContent !== '翻译中…') return;
 
       Translator.translate(originalText).then(function(result) {
-        translationEl.textContent = result;
-        translationEl.classList.remove('loading');
+        if (result === '[翻译失败]') {
+          // 翻译失败：保持隐藏，不显示英文冒充译文
+          translationEl.textContent = '';
+          translationEl.classList.add('loading');
+        } else {
+          translationEl.textContent = result;
+          translationEl.classList.remove('loading');
+        }
+      }).catch(function() {
+        // 异常：同样不显示英文
+        translationEl.textContent = '';
+        translationEl.classList.add('loading');
       });
     });
   }
